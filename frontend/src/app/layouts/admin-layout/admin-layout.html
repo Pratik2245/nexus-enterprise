@@ -1,0 +1,51 @@
+<div class="app-layout">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <h2>NEXUS</h2>
+            <span>Enterprise Platform</span>
+        </div>
+
+        <nav>
+            <a routerLink="/dashboard" routerLinkActive="active">
+                Dashboard
+            </a>
+
+            <a routerLink="/projects" routerLinkActive="active">
+                Projects
+            </a>
+
+            <a routerLink="/tasks" routerLinkActive="active">
+                Tasks
+            </a>
+
+            <a routerLink="/employees" routerLinkActive="active">
+                Employees
+            </a>
+
+            <a routerLink="/approvals" routerLinkActive="active">
+                Approvals
+            </a>
+
+            <a routerLink="/audit-logs" routerLinkActive="active">
+                Audit Logs
+            </a>
+        </nav>
+
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <h3>Workspace</h3>
+            <span>Welcome to Nexus</span>
+        </header>
+
+        <section class="page-content">
+            <router-outlet />
+        </section>
+
+    </main>
+
+</div>
