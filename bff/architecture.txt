@@ -1,0 +1,22 @@
+                 ANGULAR
+                    |
+                    v
+                NODE BFF
+                    |
+              API ROUTER
+                    |
+              MIDDLEWARE
+          /         |         \
+     Logging    Validation   Auth
+                    |
+                    v
+                CONTROLLER
+                    |
+                    v
+                 SERVICE
+                    |
+                    v
+               REPOSITORY
+                    |
+                    v
+                DATABASE
