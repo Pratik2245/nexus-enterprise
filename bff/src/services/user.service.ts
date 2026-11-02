@@ -1,5 +1,5 @@
 import * as userRepository from '../repositories/user.repository';
-
+import { AppError } from '../utils/app-error';
 type CreateUserInput = {
     issuer: string;
     subject: string;
@@ -21,7 +21,7 @@ export const getUserById = async (id: number) => {
     const user = await userRepository.findUserById(id);
 
     if (!user) {
-        throw new Error('User not found');
+        throw new AppError(404, "User Not Found");
     }
 
     return user;
@@ -40,7 +40,7 @@ export const createNewUser = async (input: CreateUserInput) => {
     );
 
     if (existingUser) {
-        throw new Error('User with this identity already exists');
+        throw new AppError(409, 'User with this identity already exists');
     }
 
     return userRepository.createUser({
@@ -58,7 +58,7 @@ export const updateExistingUser = async (
     const existingUser = await userRepository.findUserById(id);
 
     if (!existingUser) {
-        throw new Error('User not found');
+        throw new AppError(404, 'User not found');
     }
 
     return userRepository.updateUser(id, input);
@@ -68,7 +68,7 @@ export const removeUser = async (id: number) => {
     const existingUser = await userRepository.findUserById(id);
 
     if (!existingUser) {
-        throw new Error('User not found');
+        throw new AppError(404, 'User not found');
     }
 
     return userRepository.deleteUser(id);
