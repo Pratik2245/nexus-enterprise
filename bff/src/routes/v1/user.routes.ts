@@ -8,12 +8,22 @@ import {
     deleteUser,
 } from '../../controllers/user.controller';
 
+import { validate } from '../../middleware/validate';
+
+import {
+    createUserSchema,
+    updateUserSchema,
+} from '../../validators/user.validator';
+
 const router = Router();
 
 router.get('/', getAllUsers);
 router.get('/:id', getUserById);
-router.post('/', createUser);
-router.patch('/:id', updateUser);
+
+router.post('/', validate(createUserSchema), createUser);
+
+router.patch('/:id', validate(updateUserSchema), updateUser);
+
 router.delete('/:id', deleteUser);
 
 export default router;
