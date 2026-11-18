@@ -12,9 +12,36 @@ type UpdateUserInput = {
     email?: string;
     status?: 'ACTIVE' | 'INACTIVE';
 };
+export const getAllUsers = async (
+    page: number,
+    limit: number,
+    search?: string,
+    sortBy: 'name' | 'email' | 'createdAt' = 'createdAt',
+    sortOrder: 'asc' | 'desc' = 'desc'
+) => {
+    const offset = (page - 1) * limit;
 
-export const getAllUsers = async () => {
-    return userRepository.findAllUsers();
+    const result = await userRepository.findAllUsers(
+        limit,
+        offset,
+        search,
+        sortBy,
+        sortOrder
+    );
+
+    return {
+        data: result.data,
+        pagination: {
+            page,
+            limit,
+            total: result.total,
+            totalPages: Math.ceil(result.total / limit),
+        },
+        sorting: {
+            sortBy,
+            sortOrder,
+        },
+    };
 };
 
 export const getUserById = async (id: number) => {

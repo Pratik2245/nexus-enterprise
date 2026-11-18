@@ -1,13 +1,51 @@
 import { eq, desc } from 'drizzle-orm';
 import { db } from '../db';
 import { users } from '../db/schema';
+import { or, ilike, count, asc } from 'drizzle-orm';
+
 import { and } from 'drizzle-orm';
 
-export const findAllUsers = async () => {
-    return db
-        .select()
-        .from(users)
-        .orderBy(desc(users.createdAt));
+export const findAllUsers = async (
+    limit: number,
+    offset: number,
+    search?: string,
+    sortBy: 'name' | 'email' | 'createdAt' = 'createdAt',
+    sortOrder: 'asc' | 'desc' = 'desc'
+) => {
+    const searchCondition = search
+        ? or(
+            ilike(users.name, `%${search}%`),
+            ilike(users.email, `%${search}%`)
+        )
+        : undefined;
+
+    const sortColumn = {
+        name: users.name,
+        email: users.email,
+        createdAt: users.createdAt,
+    }[sortBy];
+
+    const orderBy = sortOrder === 'asc'
+        ? asc(sortColumn)
+        : desc(sortColumn);
+
+    const [data, totalResult] = await Promise.all([
+        db.select()
+            .from(users)
+            .where(searchCondition)
+            .orderBy(orderBy)
+            .limit(limit)
+            .offset(offset),
+
+        db.select({ total: count() })
+            .from(users)
+            .where(searchCondition),
+    ]);
+
+    return {
+        data,
+        total: Number(totalResult[0].total),
+    };
 };
 
 export const findUserById = async (id: number) => {

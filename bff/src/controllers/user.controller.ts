@@ -1,23 +1,30 @@
 import { Request, Response, NextFunction } from 'express';
 import * as userService from '../services/user.service';
-
 export const getAllUsers = async (
     req: Request,
     res: Response,
     next: NextFunction
 ) => {
     try {
-        const users = await userService.getAllUsers();
+        const { page, limit, search, sortBy, sortOrder } =
+            res.locals.validatedQuery;
+
+        const result = await userService.getAllUsers(
+            page,
+            limit,
+            search,
+            sortBy,
+            sortOrder
+        );
 
         res.status(200).json({
             success: true,
-            data: users,
+            ...result,
         });
     } catch (error) {
         next(error);
     }
 };
-
 export const getUserById = async (
     req: Request,
     res: Response,

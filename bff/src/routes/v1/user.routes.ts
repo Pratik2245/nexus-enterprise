@@ -1,5 +1,5 @@
 import { Router } from 'express';
-
+import { userQuerySchema } from '../../validators/user-query.validator';
 import {
     getAllUsers,
     getUserById,
@@ -17,7 +17,7 @@ import {
 
 const router = Router();
 
-router.get('/', getAllUsers);
+router.get('/', validate(userQuerySchema, "query"), getAllUsers);
 router.get('/:id', getUserById);
 
 router.post('/', validate(createUserSchema), createUser);
